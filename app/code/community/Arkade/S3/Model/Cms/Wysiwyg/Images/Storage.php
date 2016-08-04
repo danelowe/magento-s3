@@ -74,4 +74,25 @@ class Arkade_S3_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Model_Wysiwyg_
         }
         return $this->s3Helper;
     }
+    
+    /**
+     * Thumbnail URL getter
+     * 
+     * Overridden to allow another module to generate a thumbnail URL e.g. from a thumbnailing service.
+     *
+     * @param  string $filePath original file path
+     * @param  boolean $checkFile OPTIONAL is it necessary to check file availability
+     * @return string | false
+     */
+    public function getThumbnailUrl($filePath, $checkFile = false)
+    {
+        $transport = new Varien_Object(array('file_path' => $filePath, $checkFile => $checkFile));
+        Mage::dispatchEvent('wysiwyg_images_get_thumbnail_url', array('transport' => $transport));
+
+        if ($url = $transport->getThumbnailUrl()) {
+            return $url;
+        } else {
+            return parent::getThumbnailUrl($filePath, $checkFile);
+        }
+    }
 }
