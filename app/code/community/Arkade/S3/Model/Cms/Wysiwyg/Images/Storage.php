@@ -76,6 +76,26 @@ class Arkade_S3_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Model_Wysiwyg_
     }
     
     /**
+     * Upload and resize new file
+     *
+     * @param string $targetPath Target directory
+     * @param string $type Type of storage, e.g. image, media etc.
+     * @throws Mage_Core_Exception
+     * @return array File info Array
+     */
+    public function uploadFile($targetPath, $type = null)
+    {
+        $transport = new Varien_Object(array('target_path' => $targetPath, 'type' => $type));
+        Mage::dispatchEvent('wysiwyg_images_upload_file', array('transport' => $transport));
+
+        if ($response = $transport->getResponse()) {
+            return $response;
+        } else {
+            return parent::uploadFile($targetPath, $type);
+        }
+    }
+    
+    /**
      * Thumbnail URL getter
      * 
      * Overridden to allow another module to generate a thumbnail URL e.g. from a thumbnailing service.
