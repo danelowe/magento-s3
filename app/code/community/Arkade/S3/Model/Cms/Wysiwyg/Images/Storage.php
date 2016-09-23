@@ -106,7 +106,7 @@ class Arkade_S3_Model_Cms_Wysiwyg_Images_Storage extends Mage_Cms_Model_Wysiwyg_
      */
     public function getThumbnailUrl($filePath, $checkFile = false)
     {
-        $transport = new Varien_Object(array('file_path' => $filePath, $checkFile => $checkFile));
+        $transport = new Varien_Object(array('file_path' => $filePath, 'check_file' => $checkFile));
         Mage::dispatchEvent('wysiwyg_images_get_thumbnail_url', array('transport' => $transport));
 
         if ($url = $transport->getThumbnailUrl()) {
